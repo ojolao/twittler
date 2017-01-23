@@ -11,6 +11,7 @@
         var $body = $('body');
         $body.html('');
 
+        var counter = 0;
         var index = streams.home.length - 1;
         while(index >= 0){
           var tweet = streams.home[index];
@@ -18,7 +19,28 @@
           $tweet.text('@' + tweet.user + ': ' + tweet.message);
           $tweet.appendTo($body);
           index -= 1;
+          counter++;
         }
+
+        var $newTweets = $('<div class="show-new"><button>Show New Tweets</button></div>');
+        $newTweets.appendTo($body);
+        $('.show-new').on('click', function(){
+          scheduleNextTweet;
+
+          var recentTweets = streams.home.slice(counter);
+          var i = recentTweets.length - 1
+
+          while (i >= 0){
+            var lastTweet = recentTweets[i];
+            var $lastTweet =  $('<div></div>');
+            $lastTweet.text('@' + lastTweet.user + ': ' + lastTweet.message).appendTo($body);
+            i -= 1;
+            counter++;
+          }
+          console.log(recentTweets, recentTweets.length, counter)
+        });
+
+        /*need to use generateRandomTweet, creating a button would be clearer, that on click would display new tweets, and it doesn't have to be tied to the length of users, so that would be the schedule next tweet. ok*/
 
       });
 
