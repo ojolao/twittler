@@ -15,32 +15,75 @@
         var index = streams.home.length - 1;
         while(index >= 0){
           var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message + ' ' + tweet.created_at.toLocaleTimeString());
-          $tweet.appendTo($body);
+          var $tweet = $('<div>').addClass('tweets').append($('<a>').attr({ href: '#', 'data-name': tweet.user}).text('@' + tweet.user)).append($('</a>')).append(': ' + tweet.message + ' ' + tweet.created_at.toLocaleTimeString()).appendTo($body);
+
+          /* generate userFeed*/
+          var userTweets = streams.users[tweet.user];
+          var j = userTweets.length - 1;
+            while(j >= 0){
+              var userTweetsLast = userTweets[j];
+              var $userTweetsLast = $('<p class= "see-tweets">').append($('<a>').attr({ href: '#'}).text('@' + userTweetsLast.user)).append($('</a>')).append(': ' + userTweetsLast.message + ' ' + userTweetsLast.created_at.toLocaleTimeString()).appendTo($tweet);
+              j -= 1;
+            }
+
           index -= 1;
           counter++;
         }
 
-        var $newTweets = $('<div class="show-new"><button>Show New Tweets</button></div>');
-        $newTweets.appendTo($body);
-        $('.show-new').on('click', function(){
-          scheduleNextTweet;
+         $('a').on('click', function(event){
+          event.preventDefault();
+          $(this).parent().find('p').slideToggle();
+          });
 
-          var recentTweets = streams.home.slice(counter);
-          var i = recentTweets.length - 1
-
+         scheduleNextTweet();
+         var recentTweets = streams.home.slice(counter);
+         var i = recentTweets.length - 1;
           while (i >= 0){
             var lastTweet = recentTweets[i];
-            var $lastTweet =  $('<div></div>');
-            $lastTweet.text('@' + lastTweet.user + ': ' + lastTweet.message + ' ' + lastTweet.created_at.toLocaleTimeString()).appendTo($body);
+            var $lastTweet =  $('<div>').addClass('new-tweets').addClass('tweets').append($('<a>').attr({ href: '#', 'data-name': lastTweet.user}).text('@' + lastTweet.user)).append($('</a>')).append(': ' + lastTweet.message + ' ' + lastTweet.created_at.toLocaleTimeString()).appendTo($body);
+
+
             i -= 1;
             counter++;
           }
-          console.log(recentTweets, recentTweets.length, counter)
+
+        var $newTweets = $('<button class="show-new">Show New Tweets</button>');
+        $newTweets.appendTo($body).css({'display': 'inline-block', 'white-space': 'nowrap'});
+        
+        $('.show-new').on('click', function(){
+          event.preventDefault();
+          $(this).parent().find('.new-tweets').slideToggle();
         });
 
-        /*need to use generateRandomTweet, creating a button would be clearer, that on click would display new tweets, and it doesn't have to be tied to the length of users, so that would be the schedule next tweet. ok*/
+        $('.tweets').css({'display': 'inline-block',
+                          'font-family': '"Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif',
+                          'font-size': '12px',
+                          'line-height': '16px',
+                          'border-color': '#eee #ddd #bbb',
+                          'border-radius': '5px',
+                          'border-style': 'solid',
+                          'border-width': '1px',
+                          'box-shadow': '0 1px 3px rgba(0, 0, 0, 0.15)',
+                          'margin': '10px 5px',
+                          'padding': '0 16px 16px 16px',
+                          'max-width': '468px'});
+        $body.css({'display': 'inline-block',
+                          'font-family': '"Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif',
+                          'font-size': '12px',
+                          'line-height': '16px',
+                          'border-color': '#eee #ddd #bbb',
+                          'border-radius': '5px',
+                          'border-style': 'solid',
+                          'border-width': '1px',
+                          'box-shadow': '0 1px 3px rgba(0, 0, 0, 0.15)',
+                          'margin': '10px 5px',
+                          'padding': '0 16px 16px 16px',
+                          'max-width': '468px'});
+        $('.new-tweets').css('display', 'none');
+        $('.see-tweets').css('display', 'none');
+
+
+
 
       });
 
