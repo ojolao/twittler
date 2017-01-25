@@ -35,24 +35,26 @@
           $(this).parent().find('p').slideToggle();
           });
 
-         scheduleNextTweet();
-         var recentTweets = streams.home.slice(counter);
-         var i = recentTweets.length - 1;
-          while (i >= 0){
-            var lastTweet = recentTweets[i];
-            var $lastTweet =  $('<div>').addClass('new-tweets').addClass('tweets').append($('<a>').attr({ href: '#', 'data-name': lastTweet.user}).text('@' + lastTweet.user)).append($('</a>')).append(': ' + lastTweet.message + ' ' + lastTweet.created_at.toLocaleTimeString()).appendTo($body);
-
-
-            i -= 1;
-            counter++;
-          }
-
+         
+        //show new tweets
         var $newTweets = $('<button class="show-new">Show New Tweets</button>');
         $newTweets.appendTo($body).css({'display': 'inline-block', 'white-space': 'nowrap'});
         
         $('.show-new').on('click', function(){
           event.preventDefault();
-          $(this).parent().find('.new-tweets').slideToggle();
+          //location.reload(); <-alternative
+
+        //scheduleNextTweet(); <--not necessary since function is already running
+        
+         var recentTweets = streams.home.slice(counter);
+         var i = recentTweets.length - 1;
+          while (i >= 0){
+            var lastTweet = recentTweets[i];
+            var $lastTweet =  $('<div>').addClass('new-tweets').addClass('tweets').append($('<b>').text('@' + lastTweet.user)).append($('</b>')).append(': ' + lastTweet.message + ' ' + lastTweet.created_at.toLocaleTimeString()).appendTo($body);
+            i -= 1;
+            counter++;
+          }
+          //$(this).parent().find('.new-tweets').slideToggle(); <-keeping here to try later
         });
 
         $('.tweets').css({'display': 'inline-block',
